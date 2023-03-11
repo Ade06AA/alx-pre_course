@@ -1,2 +1,2 @@
 #!/bin/bash
-chmod -R 755 $(find /tmp -type d)
+chmod -R 755 $(find /tmp/h -type d)
