@@ -1,0 +1,5 @@
+# -------- local ssh config---------
+
+Host 18.207.140.222
+    PasswordAuthentication no
+    IdentityFile ~/.ssh/school
