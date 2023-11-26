@@ -1,12 +1,7 @@
 # doc
-include stdlib
 
-file { '/etc/ssh/ssh_config':
-  ensure => present,
-}-> file_line { 'Use private key in ~/.ssh/school':
-  path => '/etc/ssh/ssh_config',
-  line => 'IdentityFile ~/.ssh/school',
-}-> file_line { 'Disable password Authentication':
-  path => '/etc/ssh/ssh_config',
-  line => 'PassordAuthentication no'',
-}
+exec { 'echo':
+  path => 'usr/bin:/bin',
+  command => 'echo '' IdentifyFile ~/.ssh/school\n PasswordAuthentication no'' >> /etc/ssh/ssh_config',
+  return => [0, 1],
+} 
