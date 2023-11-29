@@ -1,5 +1,5 @@
 $default_site_loc = '/etc/nginx/sites-available/default'
-$default_site = 'https://raw.githubusercontent.com/osala-eng/alx-system_engineering-devops/master/0x0C-web_server/default-site'
+$default_site = 'https://raw.githubusercontent.com/Ade06AA/alx-system_engineering-devops/master/0x0C-web_server/default'
 
 # Run apt-get update
 exec { 'apt-update':
