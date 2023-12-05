@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#doc
+
+
+content1="\\\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t};\n\n"
+error404="\\\terror_page 404 /404.html;\n"
+addheader="\\\tadd_header X-Served-By \"$(hostname)\";\n"
+filen="/etc/nginx/sites-available/default"
+
+sudo apt-get -y update
+sudo apt-get -y install nginx
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee "/var/www/html/404.html" > /dev/null
+sudo service nginx start
+sed "$(grep -Fnm1 location ${filen}| cut -d":" -f1)i ${content1}" ${filen}
+sed "$(grep -Fnm1 location ${filen}| cut -d":" -f1)i ${error404}" ${filen}
+sed "$(grep -Fnm1 location ${filen}| cut -d":" -f1)i ${addheader}" ${filen}
+sudo service nginx restart
