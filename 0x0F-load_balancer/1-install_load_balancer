@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+sudo apt-get install -y --no-install-recommends software-properties-common
+sudo add-apt-repository ppa:vbernat/haproxy-2.8
+sudo apt-get install haproxy=2.8.\*
+
+
+mess1="\nENABLED=1\n"
+mess2="\nfrontend www\n\tbind 0.0.0.0:80\n\tdefault_backend hbnb\n"
+
+#sudo vi /etc/default/haproxy
+sudo sed '/$a ${mess1}' /etc/default/haproxy
+filec="/etc/haproxy/haproxy.cfig"
+sudo sed 's/"mode http"/"mode tcp"/' ${filec}
+sudo sed 's/"option  httplog"/"option  tcplog"/' ${filec}
+sudo sed '/$a ${mess2}' ${filec}
+
+sudo service haproxy restart
