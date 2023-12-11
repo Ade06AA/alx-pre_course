@@ -9,8 +9,10 @@ do_dig() {
 	echo "The subdomain ${1} is a $(echo "$o" | cut -d" " -f1) record and points to $(echo "$o" | cut -d" " -f2)"
 }
 if ((sub)) then
+	echo 1
 	do_dig "$sub" "$domain"
 else
+	echo 2
 	for sub in  www lb-01 web-01 web-02
 	do
 		do_dig "$sub" "$domain"
