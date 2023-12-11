@@ -8,11 +8,9 @@ do_dig() {
 	o="$(dig "${1}.${2}" | grep -C1 'ANSWER SECTION:'| tail -n1|awk '{print $4, $5}')"
 	echo "The subdomain ${1} is a $(echo "$o" | cut -d" " -f1) record and points to $(echo "$o" | cut -d" " -f2)"
 }
-if ((sub)) then
-	echo 1
+if (($# == 2)) then
 	do_dig "$sub" "$domain"
 else
-	echo 2
 	for sub in  www lb-01 web-01 web-02
 	do
 		do_dig "$sub" "$domain"
