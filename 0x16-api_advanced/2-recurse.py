@@ -5,27 +5,31 @@ doc
 import requests
 
 
-def recurse(subreddit, hot_list=[], after="tmp"):
+def recurse(subreddit, hot_list=[], count=0, after=None):
     """
     doc
     """
-    headers = requests.utils.default_headers()
-    headers.update({'User-Agent': 'My User Agent 1.0'})
-
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    if after != "tmp":
-        url = url + "?after={}".format(after)
-    r = requests.get(url, headers=headers, allow_redirects=False)
-
-    results = r.json().get('data', {}).get('children', [])
-    if not results:
-        if after == "tmp":
-            return None
-        return hot_list
-    for e in results:
-        hot_list.append(e.get('data').get('title'))
-
-    after = r.json().get('data').get('after')
-    if not after:
-        return hot_list
-    return (recurse(subreddit, hot_list, after))
+    url = 'https://www.reddit.com'
+    header = {
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+    }
+    if after is None:
+        after = ''
+    response = requests.get(
+            '{}/r/{}/.json?sort={}&limit={}&count={}&after={}'.format(
+                url, subreddit, 'hot', 30, count, after),
+            headers=header,
+            allow_redirects=False)
+    if response.status_code == 200:
+        posts = response.json()['data']['children']
+        hot_list.extend(list(map(lambda x: x['data']['title'], posts)))
+        if len(posts) >= 30 and response.json()['data']['after']:
+            return recurse(subreddit, hot_list,
+                           count + len(posts),
+                           response.json()['data']['after']
+                           )
+        else:
+            return hot_list if hot_list else None
+    else:
+        return hot_list if hot_list else None
